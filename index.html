@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Custom Filter</title>
+  <style>
+   body { 
+     background-color: #474747; 
+     user-select: none; 
+     margin: 0; 
+     padding: 0; }
+    body, input, select, label { 
+      font-family: "Open Sans", Sans-Serif; 
+      font-size: 12px; 
+      color: #d5d5d5; 
+      vertical-align: top; 
+      overflow: hidden; 
+    }
+    label { 
+      line-height:21px; 
+      display: block; 
+      margin: 2px 4px 0 0;
+    }
+    .form-group, .form-group-param {
+      text-align:center;
+    }
+    .form-group-param label { 
+      display: inline-block; 
+      width: 4em;
+      text-align: right;
+    }
+    select, input { 
+      background-color: #252525; 
+      border: 1px solid #252525; 
+      border-radius: 3px; 
+      transition: border 0.5s; 
+      padding: 3px; 
+      box-sizing: border-box; 
+      margin: 2px 2px;
+      width: 4em;
+    }
+    #scaleValue {
+      width: 8.7em;
+    }
+    input:not(.button):hover, select:hover, input:not(.button):focus, select:focus 
+    { border: 1px solid #3482f6; 
+     outline: none !important; 
+    }
+    .button { 
+      background-color: #606060; 
+      margin: 8px 0 0 1.5px; 
+      border-radius: 3px; 
+      border-top-width: 1px; 
+      border-top-color: rgba(255,255,255,0.15); 
+      border-bottom-width: 1px;
+      border-bottom-color: rgba(0,0,0,0.6);
+      border-left: 0px; 
+      border-right: 0px;
+      padding: 8px;
+      font-size: 13px; 
+      width:20.5em;
+      text-overflow: ellipsis; 
+      cursor: pointer;
+    }
+    .button:hover { 
+      background-color: #6a6a6a;
+    }
+    .buttonPreset {
+      width:11em;
+    }
+    .page {
+      padding: 6px;
+      margin: 0px auto;
+    }
+    .page > div {
+      margin-bottom: 6px;
+    }
+    h3 {
+      text-align:center;
+      line-height: 0;
+    }
+  </style>
+  <script async src="opencv.js" type="text/javascript"></script>
+</head>
+<body>
+    <div id="page" class="page">
+    <h3>Custom Filter</h3>
+
+       <div class="form-group">
+         
+       <input type="button" value="Identity" id="applyIdentity"
+              onclick='loadPreset("identity");' class="buttonPreset"/>
+
+       <input type="button" value="Invert" id="applyInvert"
+              onclick='loadPreset("invert");' class="buttonPreset"/>
+       
+       <input type="button" value="Gaussian Blur (3x3)" id="applyGaussian_blur3x3"
+              onclick='loadPreset("gaussian_blur_3x3");' class="buttonPreset"/>
+         
+       <input type="button" value="Gaussian Blur (5x5)" id="applyGaussian_blur5x5"
+              onclick='loadPreset("gaussian_blur_5x5");' class="buttonPreset"/>
+       
+       <input type="button" value="Box Blur" id="applyBox_blur"
+              onclick='loadPreset("box_blur");' class="buttonPreset"/>
+
+       <input type="button" value="Edge Detection" id="applyEdge_detection"
+              onclick='loadPreset("edge_detection");' class="buttonPreset"/>
+       
+       <input type="button" value="Ridge" id="applyRidge"
+              onclick='loadPreset("ridge");' class="buttonPreset"/> 
+
+       <input type="button" value="Emboss" id="applyEmboss"
+              onclick='loadPreset("emboss");' class="buttonPreset"/> 
+         
+       <input type="button" value="Sharpen" id="applySharpen"
+              onclick='loadPreset("sharpen");' class="buttonPreset"/>
+         
+       <input type="button" value="Unsharp Mask (5x5)" id="applyUnsharp_masking_5x5"
+              onclick='loadPreset("unsharp_masking_5x5");' class="buttonPreset"/>
+      
+       </div>
+      
+    <form id="customFilter">
+      
+      <div class="form-group">
+        <label>Matrix Values:</label>
+        <input type="number" name="matrixValues" value="0" required>
+        <input type="number" name="matrixValues" value="0" required>
+        <input type="number" name="matrixValues" value="0" required>
+        <input type="number" name="matrixValues" value="0" required>
+        <input type="number" name="matrixValues" value="0" required>
+      </div>
+
+      <div class="form-group">
+        <input type="number" name="matrixValues" value="0" required>
+        <input type="number" name="matrixValues" value="0" required>
+        <input type="number" name="matrixValues" value="-1" required>
+        <input type="number" name="matrixValues" value="0" required>
+        <input type="number" name="matrixValues" value="0" required>
+      </div>
+
+      <div class="form-group">
+        <input type="number" name="matrixValues" value="0" required>
+        <input type="number" name="matrixValues" value="-1" required>
+        <input type="number" name="matrixValues" value="5" required>
+        <input type="number" name="matrixValues" value="-1" required>
+        <input type="number" name="matrixValues" value="0" required>
+      </div>
+
+      <div class="form-group">
+        <input type="number" name="matrixValues" value="0" required>
+        <input type="number" name="matrixValues" value="0" required>
+        <input type="number" name="matrixValues" value="-1" required>
+        <input type="number" name="matrixValues" value="0" required>
+        <input type="number" name="matrixValues" value="0" required>
+      </div>
+
+      <div class="form-group">
+        <input type="number" name="matrixValues" value="0" required>
+        <input type="number" name="matrixValues" value="0" required>
+        <input type="number" name="matrixValues" value="0" required>
+        <input type="number" name="matrixValues" value="0" required>
+        <input type="number" name="matrixValues" value="0" required>
+      </div>
+
+      <div class="form-group-param">
+        <label for="scaleValue">Scale:</label>
+        <input type="number" id="scaleValue" name="scaleValue" value="1" required>
+        <label for="offsetValue">Offset:</label>
+        <input type="number" id="offsetValue" name="offsetValue" value="0" required>
+      </div>
+     
+    </form>
+      
+     <div class="form-group">
+       <input type="button" value="Apply Filter (New File)" id="applyNF" style="visibility: hidden"
+              onclick="applyCustomFilter(false);" class="button"/>
+      </div>
+      <div class="form-group">
+       <input type="button" value="Apply Filter (New Smart Layer)" id="applySL" style="visibility: hidden"
+              onclick="applyCustomFilter(true);" class="button"/>
+      </div>
+
+      <div class="form-group">
+       <p id="indi">Runtime (ms): <span id="runtime">0</span> </p> 
+       <p id="status">OpenCV.js is loading...</p>
+      </div>
+  </div>
+
+  <script>
+  
+  window.addEventListener("message", onMessage);
+  
+  var _running = false, _buffer = null; smartObject = null;
+
+  var indi = document.getElementById("indi");
+  indi.style.visibility = "hidden";
+  var runTime = document.getElementById("runtime");
+  
+  function onMessage(e) {
+      if (_running && e.data instanceof ArrayBuffer){
+          _buffer = e.data;
+          customFilter();
+          console.clear();
+      } else if (_running && e.data == "done") {
+          _running = false; _buffer = null;
+         console.clear();
+      }  else if (e.data == "done") {
+         console.clear();
+      }    
+  }
+
+  function applyCustomFilter(flag){
+    smartObject = flag;
+    _running = true;
+     window.parent.postMessage("app.activeDocument.saveToOE('png');", "*");
+    indi.style.visibility = "hidden";
+  }
+
+  function customFilter(){
+    
+    
+    // Создаем временный canvas
+    var tempCanvas = document.createElement('canvas');
+    var tempContext = tempCanvas.getContext('2d');
+    var blob = new Blob([_buffer], { type: 'image/png' });
+      
+    var url = URL.createObjectURL(blob);
+    var image = new Image();
+    image.src = url;
+            
+    image.onload = function() { 
+      indi.style.visibility = "visible";
+      var startTime = new Date();
+      
+      tempCanvas.width = image.width;
+      tempCanvas.height = image.height;
+      tempContext.drawImage(image, 0, 0);
+        
+      //Start working=========================================================
+
+      //Read parameters
+      var form = document.getElementById("customFilter");
+    
+      //Scale and offset 
+      var scale = Number(form.elements.scaleValue.value) * 1.0;
+      var offset = Number(form.elements.offsetValue.value);
+
+      var src = cv.imread(tempCanvas);
+         
+      // Convolution Matrix   (kernel)
+      var m = form.elements.matrixValues;
+      
+      var kernelData = [
+          m[0].value,  m[1].value,  m[2].value,  m[3].value,  m[4].value,
+          m[5].value,  m[6].value,  m[7].value,  m[8].value,  m[9].value,
+          m[10].value, m[11].value, m[12].value, m[13].value, m[14].value,
+          m[15].value, m[16].value, m[17].value, m[18].value, m[19].value,
+          m[20].value, m[21].value, m[22].value, m[23].value, m[24].value
+        ];
+      
+      var anchor = new cv.Point(-1, -1);
+      var kernel = cv.matFromArray(5, 5, cv.CV_32F, kernelData, anchor, 0, cv.BORDER_DEFAULT);
+
+      var dst = new cv.Mat();
+ 
+      //cv.filter2D(src, dst, cv.CV_8U, kernel);
+
+      var channels = new cv.MatVector();
+      cv.split(src, channels);
+
+      for (var i = 0; i < channels.size(); i++) {
+        if (i === 3) continue; // Пропускаем альфа-канал
+        var channel = channels.get(i);
+
+        var dstCh = new cv.Mat();
+        cv.filter2D(channel, dstCh, cv.CV_32F, kernel);        
+        dstCh.convertTo(channel, cv.CV_8U, 1/scale, offset);
+        
+        dstCh.delete();
+      }
+    
+      cv.merge(channels, dst);
+      
+      //Finish working=========================================================
+      
+
+      function putImageDataPromise(tempCanvas, dst, src, kernel) {
+          return new Promise(function(resolve, reject) {
+            // Вывод результата в canvas
+            cv.imshow(tempCanvas, dst);
+            resolve();
+            });
+      }
+
+      putImageDataPromise(tempCanvas, dst, src, kernel)
+        .then(function() {
+          
+          window.parent.postMessage("app.open('" + tempCanvas.toDataURL('image/png') + "',null," + smartObject + ");", "*");
+
+          // Освобождение памяти
+          src.delete();
+          kernel.delete();
+          dst.delete();
+
+          var endTime = new Date();
+          var duration = endTime - startTime;
+                    
+          runTime.innerHTML = duration;
+          indi.style.visibility = "visible";
+          
+        })
+        .catch(function(error) {
+          console.error('Error:', error);
+        });
+      
+    };  
+  }
+  </script>
+
+  <script>
+
+  var matrixPresets = {
+    "identity": {
+  		"kernel": [
+  			[0, 0, 0, 0, 0],
+  			[0, 0, 0, 0, 0],
+  			[0, 0, 1, 0, 0],
+  			[0, 0, 0, 0, 0],
+  			[0, 0, 0, 0, 0]
+  		],
+  		"scale": 1,
+  		"offset": 0
+  	},
+    "invert": {
+  		"kernel": [
+  			[0, 0, 0, 0, 0],
+  			[0, 0, 0, 0, 0],
+  			[0, 0, -1, 0, 0],
+  			[0, 0, 0, 0, 0],
+  			[0, 0, 0, 0, 0]
+  		],
+  		"scale": 1,
+  		"offset": 255
+  	},
+    "emboss": {
+  		"kernel": [
+  			[0, 0, 0, 0, 0],
+  			[0, 0, 0, 0, 0],
+  			[0, 0, 1, 0, 0],
+  			[0, 0, 0, -1, 0],
+  			[0, 0, 0, 0, 0]
+  		],
+  		"scale": 1,
+  		"offset": 128
+  	},
+  	"sharpen": {
+  		"kernel": [
+  			[0, 0, 0, 0, 0],
+  			[0, 0, -1, 0, 0],
+  			[0, -1, 5, -1, 0],
+  			[0, 0, -1, 0, 0],
+  			[0, 0, 0, 0, 0]
+  		],
+  		"scale": 1,
+  		"offset": 0
+  	},
+  	"ridge": {
+  		"kernel": [
+  			[0, 0, 0, 0, 0],
+  			[0, 0, -1, 0, 0],
+  			[0, -1, 4, -1, 0],
+  			[0, 0, -1, 0, 0],
+  			[0, 0, 0, 0, 0]
+  		],
+  		"scale": 0.2,
+  		"offset": 0
+  	},
+  	"edge_detection": {
+  		"kernel": [
+  			[0, 0, 0, 0, 0],
+  			[0, -1, -1, -1, 0],
+  			[0, -1, 8, -1, 0],
+  			[0, -1, -1, -1, 0],
+  			[0, 0, 0, 0, 0]
+  		],
+  		"scale": 1,
+  		"offset": 0
+  	},
+  	"box_blur": {
+  		"kernel": [
+  			[0, 0, 0, 0, 0],
+  			[0, 1, 1, 1, 0],
+  			[0, 1, 1, 1, 0],
+  			[0, 1, 1, 1, 0],
+  			[0, 0, 0, 0, 0]
+  		],
+  		"scale": 9,
+  		"offset": 0
+  	},
+  	"gaussian_blur_3x3": {
+  		"kernel": [
+  			[0, 0, 0, 0, 0],
+  			[0, 1, 2, 1, 0],
+  			[0, 2, 4, 2, 0],
+  			[0, 1, 2, 1, 0],
+  			[0, 0, 0, 0, 0]
+  		],
+  		"scale": 16,
+  		"offset": 16
+  	},
+  	"gaussian_blur_5x5": {
+  		"kernel": [
+  			[1, 4, 6, 4, 1],
+  			[4, 16, 24, 16, 4],
+  			[6, 24, 36, 24, 6],
+  			[4, 16, 24, 16, 4],
+  			[1, 4, 6, 4, 1]
+  		],
+  		"scale": 256,
+  		"offset": 0
+  	},
+  	"unsharp_masking_5x5": {
+  		"kernel": [
+  			[1, 4, 6, 4, 1],
+  			[4, 16, 24, 16, 4],
+  			[6, 24, -296, 24, 6],
+  			[4, 16, 24, 16, 4],
+  			[1, 4, 6, 4, 1]
+  		],
+  		"scale": 0.01,
+  		"offset": 0
+  	}
+  };
+
+  function loadPreset(presetName){
+     var newKernel =  matrixPresets[presetName].kernel;
+     var newScale =   matrixPresets[presetName].scale;
+     var newOffset =  matrixPresets[presetName].offset;
+
+     var form = document.getElementById("customFilter"); 
+     form.elements.scaleValue.value = newScale;
+     form.elements.offsetValue.value = newOffset;
+
+     var m = form.elements.matrixValues;
+     
+     var index = 0;
+    
+     for (var i = 0; i < 5; i++) {
+      for (var j = 0; j < 5; j++) {
+        m[index].value = newKernel[i][j];
+        index++;
+        }
+     }     
+  }
+  </script>
+
+  <script>
+  var Module = {
+ // https://emscripten.org/docs/api_reference/module.html#Module.onRuntimeInitialized
+  onRuntimeInitialized() {
+      document.getElementById('status').style.visibility  = 'hidden';
+      document.getElementById('applyNF').style.visibility = 'visible';
+      document.getElementById('applySL').style.visibility = 'visible';
+      }
+  };
+  </script>
+</body>
+</html>
